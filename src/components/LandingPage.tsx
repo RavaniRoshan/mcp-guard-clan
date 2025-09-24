@@ -44,10 +44,12 @@ export const LandingPage = () => {
               <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">
                 Testimonials
               </a>
-              <Link to="/dashboard">
+              <Link to="/waitlist">
                 <Button variant="outline">View Demo</Button>
               </Link>
-              <Button>Get Started</Button>
+              <Link to="/waitlist">
+                <Button>Get Started</Button>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -72,10 +74,12 @@ export const LandingPage = () => {
                 <a href="#testimonials" className="text-muted-foreground hover:text-foreground">
                   Testimonials
                 </a>
-                <Link to="/dashboard">
+                <Link to="/waitlist">
                   <Button variant="outline" className="w-full">View Demo</Button>
                 </Link>
-                <Button className="w-full">Get Started</Button>
+                <Link to="/waitlist">
+                  <Button className="w-full">Get Started</Button>
+                </Link>
               </div>
             </div>
           )}
@@ -101,10 +105,12 @@ export const LandingPage = () => {
               tool poisoning, and context manipulation attacks in real-time with AI-powered threat analysis.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg px-8">
-                Start Free Trial
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <Link to="/waitlist">
+                <Button size="lg" className="text-lg px-8">
+                  Start Free Trial
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
               <Link to="/dashboard">
                 <Button size="lg" variant="outline" className="text-lg px-8">
                   View Live Demo
@@ -359,8 +365,11 @@ export const LandingPage = () => {
                   <Button 
                     className="w-full" 
                     variant={plan.popular ? "default" : "outline"}
+                    asChild
                   >
-                    {plan.price === "Custom" ? "Contact Sales" : "Start Free Trial"}
+                    <Link to="/waitlist">
+                      {plan.price === "Custom" ? "Contact Sales" : "Start Free Trial"}
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -380,10 +389,12 @@ export const LandingPage = () => {
             Join the security revolution. Deploy MCP Security Guardian in minutes and protect your servers from the latest threats.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="text-lg px-8">
-              Start Free Trial
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <Link to="/waitlist">
+              <Button size="lg" variant="secondary" className="text-lg px-8">
+                Start Free Trial
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
             <Link to="/dashboard">
               <Button size="lg" variant="outline" className="text-lg px-8 border-white text-white hover:bg-white hover:text-primary">
                 View Demo
