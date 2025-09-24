@@ -1,73 +1,97 @@
-# Welcome to your Lovable project
+# MCP Security Guardian
 
-## Project info
+**A plug-and-play AI security solution for MCP servers.**
 
-**URL**: https://lovable.dev/projects/bae90792-93cc-4495-9859-69127f903dd9
+## 🛡️ About the Project
 
-## How can I edit this code?
+MCP Security Guardian is designed for solo builders and SaaS founders who use Model Context Protocol (MCP) servers, which are now widely adopted by major AI labs. With the rise of sophisticated prompt injection and data exfiltration attacks, this tool provides an instant layer of security, enabling you to detect threats, document attacks, and build trust with your users.
 
-There are several ways of editing your application.
+## ✨ Core Features
 
-**Use Lovable**
+-   **🤖 Real-time MCP Server Monitoring:** Automatically connects to any MCP-compliant server to track I/O streams for prompt injection, tool poisoning, and unauthorized data requests.
+-   **🔍 Threat Pattern Detection:** Uses GPT-5-codex and DeepSeek V3.1 to analyze model session traces, flag suspicious behavior, and categorize attacks.
+-   **📼 Attack Logging & Replay:** Securely stores detailed session logs and allows for attack "replays" and reviews within a dedicated dashboard.
+-   **📝 Instant Breach Summaries:** Generates tweet-ready threads summarizing confirmed breaches to help maintain transparency and technical credibility.
+-   **⚙️ Developer Hooks:** Simple webhooks and APIs allow for easy integration of live security dashboards directly into your MCP environments.
+-   **🍯 Honeypot Deployment:** Enables you to set up public honeypot MCP servers to capture, test, and research live attacks.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/bae90792-93cc-4495-9859-69127f903dd9) and start prompting.
+## 🛠️ Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+This project is built with a modern frontend stack:
 
-**Use your preferred IDE**
+-   **Vite:** For a fast and lean development experience.
+-   **React:** For building the user interface.
+-   **TypeScript:** For type-safe code.
+-   **Tailwind CSS:** For styling the application.
+-   **shadcn/ui:** For a set of reusable UI components.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🚀 Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+To get a local copy up and running, follow these simple steps.
 
-Follow these steps:
+### Prerequisites
+
+You need to have [Node.js](https://nodejs.org/en/) (v18 or higher) and `npm` or `bun` installed.
+
+### Installation
+
+1.  Clone the repo:
+    ```sh
+    git clone <YOUR_GIT_URL>
+    ```
+2.  Navigate to the project directory:
+    ```sh
+    cd mcp-security-guardian
+    ```
+3.  Install NPM packages:
+    ```sh
+    npm install
+    ```
+    or if you use bun:
+    ```sh
+    bun install
+    ```
+
+### Running the Application
+
+Start the development server:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+This will run the app in development mode. Open [http://localhost:5173](http://localhost:5173) (or another port if 5173 is busy) to view it in your browser.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🗺️ Development Roadmap
 
-**Use GitHub Codespaces**
+Our development plan is structured for rapid delivery and iteration.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Week 1: MVP Build Sprint
+-   Research and spec out APIs (MCP SDK, GPT-5, DeepSeek V3.1).
+-   Set up the backend (Prisma with MongoDB/Postgres) and MCP monitor service.
+-   Integrate AI models for analysis.
+-   Build the Next.js frontend dashboard with attack replay and summary generation.
+-   Deploy a public honeypot to capture initial data.
 
-## What technologies are used for this project?
+### Week 2: Beta Feedback & Expansion
+-   Incorporate user feedback, focusing on UX and reducing false positives.
+-   Enhance dashboard filtering and real-time notifications.
+-   Refine logging schema and improve documentation for one-click deploys.
 
-This project is built with:
+### Future Sprints
+-   Implement automated mitigation features (e.g., auto-blocking).
+-   Expand support for more model families.
+-   Partner with AI security communities for broader rollout.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📈 Success Metrics
 
-## How can I deploy this project?
+We measure success by:
+-   Number of unique attack vectors detected.
+-   Number of MCP servers monitored.
+-   Public engagement (shared exploits, demo requests).
+-   User feedback scores on usability and accuracy.
+-   GitHub stars and demo clones.
 
-Simply open [Lovable](https://lovable.dev/projects/bae90792-93cc-4495-9859-69127f903dd9) and click on Share -> Publish.
+## 🎯 Go-To-Market Strategy
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Our strategy is to position MCP Security Guardian as the simplest way for developers to secure their AI workflows. We will target solo developers and AI startups with a "plug-and-play" solution, launching with a public honeypot to generate social proof and community engagement.
