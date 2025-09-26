@@ -41,9 +41,6 @@ export const LandingPage = () => {
                 <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
                   Features
                 </a>
-                <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Pricing
-                </a>
                 <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">
                   Testimonials
                 </a>
@@ -71,9 +68,6 @@ export const LandingPage = () => {
                 <div className="flex flex-col space-y-4">
                   <a href="#features" className="text-muted-foreground hover:text-foreground">
                     Features
-                  </a>
-                  <a href="#pricing" className="text-muted-foreground hover:text-foreground">
-                    Pricing
                   </a>
                   <a href="#testimonials" className="text-muted-foreground hover:text-foreground">
                     Testimonials
@@ -180,108 +174,7 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Choose the plan that fits your security needs
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[
-              {
-                name: "Starter",
-                price: "$99",
-                period: "per month",
-                description: "Perfect for small teams getting started",
-                features: [
-                  "Up to 5 MCP servers",
-                  "Real-time threat detection",
-                  "Basic attack analytics",
-                  "Email alerts",
-                  "14-day retention"
-                ],
-                popular: false
-              },
-              {
-                name: "Professional",
-                price: "$299",
-                period: "per month",
-                description: "Advanced security for growing organizations",
-                features: [
-                  "Up to 25 MCP servers",
-                  "AI-powered threat analysis",
-                  "Attack replay & forensics",
-                  "Slack/Teams integration",
-                  "90-day retention",
-                  "Custom dashboards"
-                ],
-                popular: true
-              },
-              {
-                name: "Enterprise",
-                price: "Custom",
-                period: "contact us",
-                description: "Full-scale protection for large enterprises",
-                features: [
-                  "Unlimited MCP servers",
-                  "Custom ML models",
-                  "Advanced threat hunting",
-                  "API access",
-                  "1-year retention",
-                  "24/7 support",
-                  "On-premise deployment"
-                ],
-                popular: false
-              }
-            ].map((plan, index) => (
-              <Card key={index} className={`shadow-card relative ${
-                plan.popular ? "border-primary shadow-glow" : ""
-              }`}>
-                {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary">
-                    Most Popular
-                  </Badge>
-                )}
-                <CardHeader className="text-center">
-                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                  <div className="text-4xl font-bold">
-                    {plan.price}
-                    <span className="text-lg font-normal text-muted-foreground">
-                      /{plan.period}
-                    </span>
-                  </div>
-                  <CardDescription>{plan.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <ul className="space-y-3">
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-center">
-                        <CheckCircle className="h-5 w-5 text-success mr-3 flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button 
-                    className="w-full" 
-                    variant={plan.popular ? "default" : "outline"}
-                    asChild
-                  >
-                    <Link to="/waitlist">
-                      {plan.price === "Custom" ? "Contact Sales" : "Start Free Trial"}
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
@@ -326,7 +219,6 @@ export const LandingPage = () => {
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-muted-foreground">
                 <li><a href="#features" className="hover:text-foreground">Features</a></li>
-                <li><a href="#pricing" className="hover:text-foreground">Pricing</a></li>
                 <li><Link to="/dashboard" className="hover:text-foreground">Demo</Link></li>
               </ul>
             </div>

@@ -19,9 +19,22 @@ import {
 import { ThreatChart } from "@/components/ThreatChart";
 import { AttackLogTable } from "@/components/AttackLogTable";
 import { ThreatMetrics } from "@/components/ThreatMetrics";
+import { Api } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { Button as UIButton } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { getApiBase, getApiKey, setApiBase, setApiKey } from "@/lib/config";
 
 export const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const { data: honeypot } = useQuery({ queryKey: ["honeypot-recent"], queryFn: Api.getHoneypotRecent, staleTime: 10_000 });
+  const { data: hpStatus } = useQuery({ queryKey: ["honeypot-status"], queryFn: Api.getHoneypotStatus, staleTime: 10_000 });
+  const { data: alertData } = useQuery({ queryKey: ["critical-alerts"], queryFn: Api.getCriticalAlerts, staleTime: 10_000 });
+  const [replay, setReplay] = useState<{ open: boolean; frames: Array<{ index: number; ts: string; type: string; content: string }> }>({ open: false, frames: [] });
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [apiBase, setApiBaseState] = useState<string>(getApiBase());
+  const [apiKey, setApiKeyState] = useState<string>(getApiKey());
 
   return (
     <div className="min-h-screen bg-background">
@@ -41,11 +54,17 @@ export const Dashboard = () => {
               </Badge>
             </div>
             <div className="flex items-center space-x-3">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>
                 <Settings className="h-4 w-4 mr-2" />
                 Settings
               </Button>
-              <Button variant="default" size="sm">
+              <Button variant="default" size="sm" onClick={async () => {
+                const attacks = alertData?.items ?? [];
+                const header = `Security Report (Last 24h) - Critical Incidents: ${alertData?.count24h ?? 0}`;
+                const bullets = attacks.map(a => `- ${a.timestamp} ${a.attackType} on ${a.serverUrl} (${a.severity})`).join("\n");
+                const report = `${header}\n\n${bullets}`;
+                await navigator.clipboard.writeText(report);
+              }}>
                 <Share2 className="h-4 w-4 mr-2" />
                 Share Report
               </Button>
@@ -59,8 +78,8 @@ export const Dashboard = () => {
         <Alert className="border-critical/20 bg-critical/5">
           <AlertTriangle className="h-4 w-4 text-critical" />
           <AlertDescription className="text-critical">
-            <strong>3 Critical Threats Detected</strong> in the last 24 hours. 
-            <Button variant="link" className="p-0 h-auto text-critical underline ml-2">
+            <strong>{alertData?.count24h ?? 0} Critical Threats Detected</strong> in the last 24 hours. 
+            <Button variant="link" className="p-0 h-auto text-critical underline ml-2" onClick={() => setReplay({ open: true, frames: (alertData?.items ?? []).map((a, idx) => ({ index: idx, ts: a.timestamp, type: 'input', content: `${a.attackType} on ${a.serverUrl}` })) })}>
               View Details
             </Button>
           </AlertDescription>
@@ -212,18 +231,65 @@ export const Dashboard = () => {
                           >
                             {threat.count} detected
                           </Badge>
-                          <Button size="sm" variant="outline">
+                          <UIButton size="sm" variant="outline" onClick={async () => {
+                            const resp = await Api.getReplay("SES-EXAMPLE");
+                            setReplay({ open: true, frames: resp.frames });
+                          }}>
                             <Eye className="h-4 w-4 mr-1" />
                             Replay
-                          </Button>
+                          </UIButton>
                         </div>
                       </div>
+
+  {/* Settings dialog */}
+  {settingsOpen && (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-card border border-border rounded-lg p-6 w-full max-w-lg space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold">Settings</h3>
+          <UIButton size="sm" variant="outline" onClick={() => setSettingsOpen(false)}>Close</UIButton>
+        </div>
+        <div className="space-y-3">
+          <div>
+            <label className="text-sm font-medium">API Base URL</label>
+            <Input placeholder="http://localhost:3001" value={apiBase} onChange={(e) => setApiBaseState(e.target.value)} />
+          </div>
+          <div>
+            <label className="text-sm font-medium">API Key</label>
+            <Input placeholder="your-api-key" value={apiKey} onChange={(e) => setApiKeyState(e.target.value)} />
+          </div>
+        </div>
+        <div className="flex justify-end space-x-2">
+          <UIButton variant="outline" onClick={() => { setSettingsOpen(false); }}>Cancel</UIButton>
+          <UIButton onClick={() => { setApiBase(apiBase); setApiKey(apiKey); setSettingsOpen(false); window.location.reload(); }}>Save</UIButton>
+        </div>
+      </div>
+    </div>
+  )}
                       <p className="text-sm text-muted-foreground">{threat.description}</p>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
+            {replay.open && (
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div className="bg-card border border-border rounded-lg p-6 max-w-2xl w-full space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold">Session Replay</h3>
+                    <UIButton size="sm" variant="outline" onClick={() => setReplay({ open: false, frames: [] })}>Close</UIButton>
+                  </div>
+                  <div className="max-h-[60vh] overflow-auto space-y-2 text-sm font-mono">
+                    {replay.frames.map((f) => (
+                      <div key={f.index} className="p-2 border border-border rounded">
+                        <div className="text-muted-foreground">[{f.ts}] {f.type.toUpperCase()}</div>
+                        <div className="whitespace-pre-wrap">{f.content}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="logs" className="space-y-6">
@@ -257,8 +323,8 @@ export const Dashboard = () => {
                   <div className="space-y-2">
                     <label className="text-sm font-medium">Status</label>
                     <div className="flex items-center space-x-2">
-                      <div className="h-3 w-3 bg-success rounded-full animate-pulse"></div>
-                      <span className="text-sm">Live & Collecting Data</span>
+                      <div className={`h-3 w-3 rounded-full ${hpStatus?.collecting ? 'bg-success animate-pulse' : 'bg-muted'}`}></div>
+                      <span className="text-sm">{hpStatus?.collecting ? 'Live & Collecting Data' : 'Paused'}</span>
                     </div>
                   </div>
                 </div>
@@ -266,34 +332,28 @@ export const Dashboard = () => {
                 <div className="border border-border rounded-lg p-4 bg-muted/50">
                   <h4 className="font-semibold mb-2">Recent Captures</h4>
                   <div className="space-y-2 text-sm font-mono">
-                    <div>
-                      <span className="text-muted-foreground">[14:25:32]</span>
-                      <span className="text-critical ml-2">CRITICAL:</span>
-                      <span className="ml-2">Prompt injection: "Ignore all previous instructions..."</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">[14:24:15]</span>
-                      <span className="text-high ml-2">HIGH:</span>
-                      <span className="ml-2">Tool poisoning attempt on filesystem access</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">[14:23:01]</span>
-                      <span className="text-medium ml-2">MEDIUM:</span>
-                      <span className="ml-2">Suspicious context manipulation detected</span>
-                    </div>
+                    {(honeypot?.items ?? []).map((i, idx) => (
+                      <div key={idx}>
+                        <span className="text-muted-foreground">[{i.ts}]</span>
+                        <span className={`ml-2 ${i.severity === 'critical' ? 'text-critical' : i.severity === 'high' ? 'text-high' : 'text-medium'}`}>
+                          {i.severity.toUpperCase()}:
+                        </span>
+                        <span className="ml-2">{i.summary}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
                 <div className="flex space-x-3">
-                  <Button>
+                  <Button onClick={() => { const a = document.createElement('a'); a.href = '/api/honeypot/export'; a.download = 'honeypot_logs.csv'; document.body.appendChild(a); a.click(); a.remove(); }}>
                     <Download className="h-4 w-4 mr-2" />
                     Export Logs
                   </Button>
-                  <Button variant="outline">
+                  <Button variant="outline" onClick={async () => { const r = await Api.generateHoneypotReport(); navigator.clipboard.writeText(r.markdown); }}>
                     <Play className="h-4 w-4 mr-2" />
                     Generate Report
                   </Button>
-                  <Button variant="outline">
+                  <Button variant="outline" onClick={async () => { const r = await Api.generateHoneypotReport(); const share = `Honeypot Report (last 24h)\n\n${r.markdown}`; await navigator.clipboard.writeText(share); }}>
                     <Share2 className="h-4 w-4 mr-2" />
                     Share Findings
                   </Button>

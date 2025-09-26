@@ -10,34 +10,37 @@ import {
   Eye,
   Zap
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Api } from "@/lib/api";
 
 export const ThreatMetrics = () => {
+  const { data, isLoading } = useQuery({ queryKey: ["metrics"], queryFn: Api.getMetrics, staleTime: 10_000 });
   const metrics = [
     {
       title: "Security Score",
-      value: "94",
+      value: isLoading ? "--" : String(data?.securityScore ?? "--"),
       unit: "/100",
-      change: "+2.1%",
-      trend: "up",
+      change: isLoading ? "--" : `${data ? `${data.deltas.securityScore}%` : "--"}`,
+      trend: isLoading ? "up" : (data && data.deltas.securityScore >= 0 ? "up" : "down"),
       icon: Shield,
       color: "success",
       description: "Overall protection effectiveness"
     },
     {
       title: "Active Threats",
-      value: "7",
+      value: isLoading ? "--" : String(data?.activeThreats ?? "--"),
       unit: "",
-      change: "-12%",
-      trend: "down",
+      change: isLoading ? "--" : `${data ? `${data.deltas.activeThreats}%` : "--"}`,
+      trend: isLoading ? "down" : (data && data.deltas.activeThreats <= 0 ? "down" : "up"),
       icon: AlertTriangle,
       color: "critical",
       description: "Currently detected threats"
     },
     {
       title: "Monitored Servers",
-      value: "24",
+      value: isLoading ? "--" : String(data?.monitoredServers ?? "--"),
       unit: "",
-      change: "+3",
+      change: isLoading ? "--" : `${data ? `${data.deltas.monitoredServers}` : "--"}`,
       trend: "up",
       icon: Eye,
       color: "primary",
@@ -45,10 +48,10 @@ export const ThreatMetrics = () => {
     },
     {
       title: "Response Time",
-      value: "12",
+      value: isLoading ? "--" : String(data?.responseTimeMs ?? "--"),
       unit: "ms",
-      change: "-5ms",
-      trend: "down",
+      change: isLoading ? "--" : `${data ? `${data.deltas.responseTimeMs}ms` : "--"}`,
+      trend: isLoading ? "down" : (data && data.deltas.responseTimeMs <= 0 ? "down" : "up"),
       icon: Zap,
       color: "info",
       description: "Average threat detection speed"

@@ -1,17 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
-
-const data = [
-  { time: '00:00', critical: 2, high: 5, medium: 12, low: 8 },
-  { time: '04:00', critical: 1, high: 3, medium: 15, low: 6 },
-  { time: '08:00', critical: 4, high: 8, medium: 20, low: 12 },
-  { time: '12:00', critical: 6, high: 12, medium: 25, low: 18 },
-  { time: '16:00', critical: 3, high: 7, medium: 18, low: 14 },
-  { time: '20:00', critical: 5, high: 9, medium: 22, low: 16 },
-  { time: '24:00', critical: 2, high: 4, medium: 14, low: 10 },
-];
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { useQuery } from "@tanstack/react-query";
+import { Api } from "@/lib/api";
 
 export const ThreatChart = () => {
+  const { data, isLoading } = useQuery({ queryKey: ["chart"], queryFn: Api.getChart, staleTime: 10_000 });
+  const points = data?.data ?? [];
   return (
     <Card>
       <CardHeader>
@@ -22,7 +16,7 @@ export const ThreatChart = () => {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={data}>
+          <AreaChart data={points}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis 
               dataKey="time" 

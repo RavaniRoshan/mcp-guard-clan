@@ -54,13 +54,60 @@ You need to have [Node.js](https://nodejs.org/en/) (v18 or higher) and `npm` or 
 
 ### Running the Application
 
-Start the development server:
+Start backend and frontend together:
 
 ```sh
-npm run dev
+npm run dev:all
 ```
 
-This will run the app in development mode. Open [http://localhost:5173](http://localhost:5173) (or another port if 5173 is busy) to view it in your browser.
+Or run separately:
+
+```sh
+npm run server   # starts mock API on 3001
+npm run dev      # starts Vite on 8080 with /api proxy
+```
+
+Mock API endpoints:
+
+- GET `/api/health`
+- GET `/api/attacks`
+- GET `/api/attacks/:id`
+- GET `/api/metrics`
+- GET `/api/chart`
+- GET `/api/replay/:sessionId`
+- GET `/api/honeypot/recent`
+
+Notes:
+
+- Vite dev proxy routes `/api` to `http://localhost:3001`
+- Frontend uses React Query; dev requests include `x-signature: dev-signature`
+- Configure frontend at runtime: open Dashboard → Settings to set API Base URL and API Key
+
+### Environment variables
+
+Backend:
+
+```
+DATABASE_URL=postgres://user:pass@host:5432/db
+REDIS_URL=redis://host:6379
+JWT_SECRET=change-me-32chars
+HMAC_SECRET=change-me-32chars
+OPENAI_API_KEY=...
+DEEPSEEK_API_KEY=...
+S3_ENDPOINT=
+S3_BUCKET=
+S3_ACCESS_KEY=
+S3_SECRET_KEY=
+WEB_BASE_URL=https://your.domain
+SENTRY_DSN=
+```
+
+Frontend:
+
+```
+VITE_API_BASE_URL=   # optional; or set via Dashboard → Settings
+VITE_SENTRY_DSN=
+```
 
 ## 🗺️ Development Roadmap
 
