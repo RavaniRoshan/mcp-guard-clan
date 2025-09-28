@@ -39,35 +39,37 @@ export const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card">
+      <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-card/60 backdrop-blur supports-[backdrop-filter]:bg-card/40">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Shield className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  MCP Security Guardian
-                </h1>
+          <div className="border border-border/60 bg-card/60 backdrop-blur supports-[backdrop-filter]:bg-card/40 shadow-lg rounded-full px-8 py-4 max-w-6xl mx-auto">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <Shield className="h-8 w-8 text-primary" />
+                  <h1 className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                    MCP Security Guardian
+                  </h1>
+                </div>
+                <Badge variant="outline" className="bg-success/10 text-success border-success/20">
+                  Live Monitoring
+                </Badge>
               </div>
-              <Badge variant="outline" className="bg-success/10 text-success border-success/20">
-                Live Monitoring
-              </Badge>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Button variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
-              </Button>
-              <Button variant="default" size="sm" onClick={async () => {
-                const attacks = alertData?.items ?? [];
-                const header = `Security Report (Last 24h) - Critical Incidents: ${alertData?.count24h ?? 0}`;
-                const bullets = attacks.map(a => `- ${a.timestamp} ${a.attackType} on ${a.serverUrl} (${a.severity})`).join("\n");
-                const report = `${header}\n\n${bullets}`;
-                await navigator.clipboard.writeText(report);
-              }}>
-                <Share2 className="h-4 w-4 mr-2" />
-                Share Report
-              </Button>
+              <div className="flex items-center space-x-3">
+                <Button variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>
+                  <Settings className="h-4 w-4 mr-2" />
+                  Settings
+                </Button>
+                <Button variant="default" size="sm" onClick={async () => {
+                  const attacks = alertData?.items ?? [];
+                  const header = `Security Report (Last 24h) - Critical Incidents: ${alertData?.count24h ?? 0}`;
+                  const bullets = attacks.map(a => `- ${a.timestamp} ${a.attackType} on ${a.serverUrl} (${a.severity})`).join("\n");
+                  const report = `${header}\n\n${bullets}`;
+                  await navigator.clipboard.writeText(report);
+                }}>
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Share Report
+                </Button>
+              </div>
             </div>
           </div>
         </div>

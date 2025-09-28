@@ -25,9 +25,9 @@ export const LandingPage = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="sticky top-4 z-50">
-        <div className="container mx-auto px-6">
-          <div className="border border-border/60 bg-card/60 backdrop-blur supports-[backdrop-filter]:bg-card/40 shadow-card rounded-full px-6 py-3">
+      <nav className="sticky top-0 z-50 w-full">
+        <div className="container mx-auto px-6 py-4">
+          <div className="border border-border/60 bg-card/60 backdrop-blur supports-[backdrop-filter]:bg-card/40 shadow-lg rounded-full px-8 py-4 max-w-6xl mx-auto">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <Shield className="h-8 w-8 text-primary" />
@@ -64,7 +64,7 @@ export const LandingPage = () => {
 
             {/* Mobile Navigation */}
             {mobileMenuOpen && (
-              <div className="md:hidden mt-3 pt-3 border border-border/60 bg-card/60 backdrop-blur supports-[backdrop-filter]:bg-card/40 shadow-card rounded-3xl px-6 py-4">
+              <div className="md:hidden mt-4 pt-4 border border-border/60 bg-card/60 backdrop-blur supports-[backdrop-filter]:bg-card/40 shadow-lg rounded-3xl px-6 py-4">
                 <div className="flex flex-col space-y-4">
                   <a href="#features" className="text-muted-foreground hover:text-foreground">
                     Features
