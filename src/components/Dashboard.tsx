@@ -14,7 +14,8 @@ import {
   ExternalLink,
   Play,
   Download,
-  Share2
+  Share2,
+  LogOut
 } from "lucide-react";
 import { ThreatChart } from "@/components/ThreatChart";
 import { AttackLogTable } from "@/components/AttackLogTable";
@@ -25,6 +26,7 @@ import { Button as UIButton } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { getApiBase, getApiKey, setApiBase, setApiKey } from "@/lib/config";
+import { useAuth } from "@/auth/AuthContext";
 
 export const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -35,6 +37,7 @@ export const Dashboard = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [apiBase, setApiBaseState] = useState<string>(getApiBase());
   const [apiKey, setApiKeyState] = useState<string>(getApiKey());
+  const { signOut } = useAuth();
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,6 +61,10 @@ export const Dashboard = () => {
                 <Button variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>
                   <Settings className="h-4 w-4 mr-2" />
                   Settings
+                </Button>
+                <Button variant="outline" size="sm" onClick={signOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
                 </Button>
                 <Button variant="default" size="sm" onClick={async () => {
                   const attacks = alertData?.items ?? [];

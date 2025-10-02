@@ -18,9 +18,12 @@ import {
 import { Link } from "react-router-dom";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { motion, useAnimation, useInView } from "framer-motion";
+import { useAuth } from "@/auth/AuthContext";
+import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 
 export const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-background">
@@ -45,12 +48,20 @@ export const LandingPage = () => {
                   Testimonials
                 </a>
                 <ThemeToggle />
-                <Link to="/waitlist">
-                  <Button variant="outline">View Demo</Button>
-                </Link>
-                <Link to="/waitlist">
-                  <Button>Get Started</Button>
-                </Link>
+                {user ? (
+                  <Link to="/dashboard">
+                    <Button>Dashboard</Button>
+                  </Link>
+                ) : (
+                  <>
+                    <Link to="/waitlist">
+                      <Button variant="outline">View Demo</Button>
+                    </Link>
+                    <Link to="/waitlist">
+                      <Button>Get Started</Button>
+                    </Link>
+                  </>
+                )}
               </div>
 
               {/* Mobile Menu Button */}
@@ -75,12 +86,20 @@ export const LandingPage = () => {
                   <div>
                     <ThemeToggle />
                   </div>
-                  <Link to="/waitlist">
-                    <Button variant="outline" className="w-full">View Demo</Button>
-                  </Link>
-                  <Link to="/waitlist">
-                    <Button className="w-full">Get Started</Button>
-                  </Link>
+                  {user ? (
+                    <Link to="/dashboard">
+                      <Button className="w-full">Dashboard</Button>
+                    </Link>
+                  ) : (
+                    <>
+                      <Link to="/waitlist">
+                        <Button variant="outline" className="w-full">View Demo</Button>
+                      </Link>
+                      <Link to="/waitlist">
+                        <Button className="w-full">Get Started</Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             )}
@@ -107,17 +126,28 @@ export const LandingPage = () => {
               tool poisoning, and context manipulation attacks in real-time with AI-powered threat analysis.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/waitlist">
-                <Button size="lg" className="text-lg px-8">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/dashboard">
-                <Button size="lg" variant="outline" className="text-lg px-8">
-                  View Live Demo
-                </Button>
-              </Link>
+              {user ? (
+                <Link to="/dashboard">
+                  <Button size="lg" className="text-lg px-8">
+                    Go to Dashboard
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link to="/waitlist">
+                    <Button size="lg" className="text-lg px-8">
+                      Start Free Trial
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </Link>
+                  <Link to="/dashboard">
+                    <Button size="lg" variant="outline" className="text-lg px-8">
+                      View Live Demo
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
             <p className="text-sm text-muted-foreground mt-4">
               Deploy in 2 minutes • No credit card required • 14-day free trial
@@ -187,17 +217,28 @@ export const LandingPage = () => {
             Join the security revolution. Deploy MCP Security Guardian in minutes and protect your servers from the latest threats.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/waitlist">
-              <Button size="lg" variant="secondary" className="text-lg px-8">
-                Start Free Trial
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link to="/dashboard">
-              <Button size="lg" variant="outline" className="text-lg px-8 border-white text-white hover:bg-white hover:text-primary">
-                View Demo
-              </Button>
-            </Link>
+            {user ? (
+              <Link to="/dashboard">
+                <Button size="lg" variant="secondary" className="text-lg px-8">
+                  Go to Dashboard
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/waitlist">
+                  <Button size="lg" variant="secondary" className="text-lg px-8">
+                    Start Free Trial
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link to="/dashboard">
+                  <Button size="lg" variant="outline" className="text-lg px-8 border-white text-white hover:bg-white hover:text-primary">
+                    View Demo
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </section>

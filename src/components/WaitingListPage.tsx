@@ -20,6 +20,8 @@ import {
   User
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/auth/AuthContext";
+import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 
 export const WaitingListPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -34,6 +36,7 @@ export const WaitingListPage = () => {
     updates: true
   });
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,7 +97,7 @@ export const WaitingListPage = () => {
                 </Link>
                 <Link to="/dashboard" className="flex-1">
                   <Button className="w-full">
-                    View Live Demo
+                    {user ? "Go to Dashboard" : "View Live Demo"}
                   </Button>
                 </Link>
               </div>
@@ -117,12 +120,22 @@ export const WaitingListPage = () => {
                 MCP Security Guardian
               </span>
             </Link>
-            <Link to="/">
-              <Button variant="outline">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
-              </Button>
-            </Link>
+            <div className="flex items-center space-x-2">
+              {user ? (
+                <Link to="/dashboard">
+                  <Button variant="outline">
+                    Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <Link to="/">
+                  <Button variant="outline">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back to Home
+                  </Button>
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -285,6 +298,20 @@ export const WaitingListPage = () => {
                     Unsubscribe anytime.
                   </p>
                 </form>
+                
+                {!user && (
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <p className="text-center text-sm text-muted-foreground mb-4">
+                      Or continue with your Google account
+                    </p>
+                    <GoogleLoginButton onLoginSuccess={() => {
+                      toast({
+                        title: "Success",
+                        description: "You've been logged in successfully!",
+                      });
+                    }} />
+                  </div>
+                )}
               </CardContent>
             </Card>
 
