@@ -36,7 +36,7 @@ export const WaitingListPage = () => {
     updates: true
   });
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,7 +97,7 @@ export const WaitingListPage = () => {
                 </Link>
                 <Link to="/dashboard" className="flex-1">
                   <Button className="w-full">
-                    {user ? "Go to Dashboard" : "View Live Demo"}
+                    {isAuthenticated ? "Go to Dashboard" : "View Live Demo"}
                   </Button>
                 </Link>
               </div>
@@ -121,7 +121,7 @@ export const WaitingListPage = () => {
               </span>
             </Link>
             <div className="flex items-center space-x-2">
-              {user ? (
+              {isAuthenticated ? (
                 <Link to="/dashboard">
                   <Button variant="outline">
                     Dashboard
@@ -299,7 +299,7 @@ export const WaitingListPage = () => {
                   </p>
                 </form>
                 
-                {!user && (
+                {!isAuthenticated && (
                   <div className="mt-6 pt-6 border-t border-border">
                     <p className="text-center text-sm text-muted-foreground mb-4">
                       Or continue with your Google account

@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
-import { auth } from './firebaseConfig';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface AuthContextType {
-  user: User | null;
+  user: any;
   loading: boolean;
   signOut: () => Promise<void>;
+  isAuthenticated: boolean;
+  loginWithRedirect: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,22 +20,18 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, isLoading, isAuthenticated, logout, loginWithRedirect } = useAuth0();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    if (!isLoading) {
       setLoading(false);
-    });
-
-    return unsubscribe;
-  }, []);
+    }
+  }, [isLoading]);
 
   const signOut = async () => {
     try {
-      await firebaseSignOut(auth);
-      setUser(null);
+      await logout({ logoutParams: { returnTo: window.location.origin } });
     } catch (error) {
       console.error('Error signing out:', error);
       throw error;
@@ -42,9 +39,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const value = {
-    user,
-    loading,
+    user: user || null,
+    loading: loading || isLoading,
     signOut,
+    isAuthenticated,
+    loginWithRedirect,
   };
 
   return (

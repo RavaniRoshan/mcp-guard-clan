@@ -23,7 +23,7 @@ import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 
 export const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen bg-background">
@@ -48,7 +48,7 @@ export const LandingPage = () => {
                   Testimonials
                 </a>
                 <ThemeToggle />
-                {user ? (
+                {isAuthenticated ? (
                   <Link to="/dashboard">
                     <Button>Dashboard</Button>
                   </Link>
@@ -86,7 +86,7 @@ export const LandingPage = () => {
                   <div>
                     <ThemeToggle />
                   </div>
-                  {user ? (
+                  {isAuthenticated ? (
                     <Link to="/dashboard">
                       <Button className="w-full">Dashboard</Button>
                     </Link>
@@ -126,7 +126,7 @@ export const LandingPage = () => {
               tool poisoning, and context manipulation attacks in real-time with AI-powered threat analysis.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              {user ? (
+              {isAuthenticated ? (
                 <Link to="/dashboard">
                   <Button size="lg" className="text-lg px-8">
                     Go to Dashboard
@@ -217,7 +217,7 @@ export const LandingPage = () => {
             Join the security revolution. Deploy MCP Security Guardian in minutes and protect your servers from the latest threats.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {user ? (
+            {isAuthenticated ? (
               <Link to="/dashboard">
                 <Button size="lg" variant="secondary" className="text-lg px-8">
                   Go to Dashboard

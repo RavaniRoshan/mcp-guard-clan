@@ -31,7 +31,7 @@ Advanced security monitoring for Model Context Protocol servers. Detect prompt i
    ```
 
 3. Set up environment variables:
-   Copy the `.env.example` file to `.env` and fill in your Firebase configuration:
+   Copy the `.env.example` file to `.env` and fill in your Auth0 configuration:
    ```bash
    cp .env.example .env
    ```
@@ -41,23 +41,31 @@ Advanced security monitoring for Model Context Protocol servers. Detect prompt i
    npm run dev
    ```
 
-### Setting up Google Authentication
+### Setting up Auth0 Authentication
 
-1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
+1. Create an Auth0 account at [Auth0](https://auth0.com/)
 
-2. Enable Google authentication in the Firebase Authentication section
+2. Create a new Auth0 application (Single Page Application)
 
-3. Copy your Firebase configuration values to the `.env` file:
+3. Configure the following settings in your Auth0 application:
+   - Allowed Callback URLs: `http://localhost:8080`
+   - Allowed Logout URLs: `http://localhost:8080`
+   - Allowed Web Origins: `http://localhost:8080`
+
+4. Enable Google connection in the Auth0 dashboard:
+   - Go to Authentication > Social
+   - Enable Google
+   - Configure with your Google OAuth2 credentials
+
+5. Copy your Auth0 configuration values to the `.env` file:
    ```
-   VITE_FIREBASE_API_KEY=your_api_key
-   VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
-   VITE_FIREBASE_PROJECT_ID=your_project_id
-   VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-   VITE_FIREBASE_APP_ID=your_app_id
+   VITE_AUTH0_DOMAIN=your_auth0_domain
+   VITE_AUTH0_CLIENT_ID=your_auth0_client_id
+   VITE_AUTH0_AUDIENCE=your_auth0_api_identifier
+   VITE_AUTH0_REDIRECT_URI=http://localhost:8080
    ```
 
-4. Restart the development server
+6. Restart the development server
 
 ## Project Structure
 
@@ -81,7 +89,7 @@ Advanced security monitoring for Model Context Protocol servers. Detect prompt i
 - React with TypeScript
 - Vite
 - Tailwind CSS
-- Firebase Authentication
+- Auth0 Authentication
 - React Router
 - TanStack Query
 - Framer Motion
