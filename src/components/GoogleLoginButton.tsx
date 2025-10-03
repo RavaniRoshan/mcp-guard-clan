@@ -22,10 +22,10 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({ onLoginSuc
     } catch (err) {
       toast({
         title: 'Error',
-        description: 'Failed to log in with Google. Please try again.',
+        description: 'Failed to log in. Please try again.',
         variant: 'destructive',
       });
-      console.error('Google login error:', err);
+      console.error('Login error:', err);
     }
   };
 

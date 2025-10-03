@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 
 interface AuthContextType {
   user: any;
@@ -19,8 +18,47 @@ export const useAuth = () => {
   return context;
 };
 
+// Fallback auth implementation for development
+const useFallbackAuth = () => {
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Simulate auth check
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  const loginWithRedirect = async () => {
+    // Simulate login
+    const mockUser = {
+      name: 'Demo User',
+      email: 'demo@example.com',
+      picture: 'https://via.placeholder.com/150'
+    };
+    setUser(mockUser);
+    setIsAuthenticated(true);
+  };
+
+  const signOut = async () => {
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+
+  return {
+    user,
+    isLoading: loading,
+    isAuthenticated,
+    loginWithRedirect,
+    logout: signOut
+  };
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user, isLoading, isAuthenticated, logout, loginWithRedirect } = useAuth0();
+  // Use fallback auth for development
+  const { user, isLoading, isAuthenticated, logout, loginWithRedirect } = useFallbackAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,7 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     try {
-      await logout({ logoutParams: { returnTo: window.location.origin } });
+      await logout();
     } catch (error) {
       console.error('Error signing out:', error);
       throw error;
